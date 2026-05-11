@@ -1,0 +1,16 @@
+# 虚拟环境 (防止把 Conda 或 venv 的几万个文件传到云端)
+venv/
+env/
+
+# Python 编译缓存
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 爬虫下载的本地海报图片与日志
+posters/
+*.log
+
+# 数据库文件 (不要把本地测试数据传上去)
+*.sqlite3
+*.db
