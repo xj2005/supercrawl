@@ -1,4 +1,5 @@
 import csv
+import os
 from bs4 import BeautifulSoup
 import logging
 from proxies import RequestManager
@@ -8,39 +9,96 @@ from download_images import ImageDownloader
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# def parse_list_page(html):
+#     """解析列表页，提取基础信息和详情页链接"""
+#     soup = BeautifulSoup(html, 'lxml')
+#     movies = soup.select('.grid_view li')
+#     parsed_data = []
+#     image_tasks = []
+
+#     for item in movies:
+#         rank = item.select_one('.pic em').text
+#         detail_url = item.select_one('.info .hd a')['href']
+#         titles = [span.text for span in item.select('.info .hd span')]
+#         title_cn = titles[0]
+#         title_other = titles[1].replace('/', '').strip() if len(titles) > 1 else ""
+        
+#         poster_url = item.select_one('.pic img')['src']
+        
+#         rating = item.select_one('.rating_num').text
+#         rating_count = item.select_one('.star span:nth-child(4)').text.replace('人评价', '')
+        
+#         # 简单提取信息留作备用，详细信息我们进详情页抓
+#         quote = item.select_one('.inq').text if item.select_one('.inq') else ""
+
+#         parsed_data.append({
+#             '排名': rank,
+#             '中文标题': title_cn,
+#             '外文标题': title_other,
+#             '评分': rating,
+#             '评价人数': rating_count,
+#             '简介': quote,
+#             '详情链接': detail_url
+#         })
+#         # 收集图片下载任务
+#         image_tasks.append((poster_url, f"{rank}_{title_cn}"))
+
+#     return parsed_data, image_tasks
 def parse_list_page(html):
-    """解析列表页，提取基础信息和详情页链接"""
+    """解析列表页，提取基础信息和详情页链接 (加入防御性解析)"""
     soup = BeautifulSoup(html, 'lxml')
     movies = soup.select('.grid_view li')
     parsed_data = []
     image_tasks = []
 
     for item in movies:
-        rank = item.select_one('.pic em').text
-        detail_url = item.select_one('.info .hd a')['href']
-        titles = [span.text for span in item.select('.info .hd span')]
-        title_cn = titles[0]
-        title_other = titles[1].replace('/', '').strip() if len(titles) > 1 else ""
-        
-        poster_url = item.select_one('.pic img')['src']
-        
-        rating = item.select_one('.rating_num').text
-        rating_count = item.select_one('.star span:nth-child(4)').text.replace('人评价', '')
-        
-        # 简单提取信息留作备用，详细信息我们进详情页抓
-        quote = item.select_one('.inq').text if item.select_one('.inq') else ""
+        try:
+            # 安全提取排名
+            rank_tag = item.select_one('.pic em')
+            rank = rank_tag.text if rank_tag else "未知"
+            
+            # 安全提取详情链接
+            detail_tag = item.select_one('.info .hd a')
+            detail_url = detail_tag['href'] if detail_tag else ""
+            
+            # 安全提取标题
+            titles = [span.text for span in item.select('.info .hd span')]
+            title_cn = titles[0] if len(titles) > 0 else "未知标题"
+            title_other = titles[1].replace('/', '').strip() if len(titles) > 1 else ""
+            
+            # 安全提取海报链接
+            poster_tag = item.select_one('.pic img')
+            poster_url = poster_tag['src'] if poster_tag else ""
+            
+            # 安全提取评分
+            rating_tag = item.select_one('.rating_num')
+            rating = rating_tag.text if rating_tag else "无"
+            
+            # 安全提取评价人数 (放弃玄学的 nth-child，直接取所有 span 里的最后一个)
+            star_spans = item.select('.star span')
+            rating_count = star_spans[-1].text.replace('人评价', '') if star_spans else "0"
+            
+            # 安全提取简介
+            quote_tag = item.select_one('.inq')
+            quote = quote_tag.text if quote_tag else ""
 
-        parsed_data.append({
-            '排名': rank,
-            '中文标题': title_cn,
-            '外文标题': title_other,
-            '评分': rating,
-            '评价人数': rating_count,
-            '简介': quote,
-            '详情链接': detail_url
-        })
-        # 收集图片下载任务
-        image_tasks.append((poster_url, f"{rank}_{title_cn}"))
+            parsed_data.append({
+                '排名': rank,
+                '中文标题': title_cn,
+                '外文标题': title_other,
+                '评分': rating,
+                '评价人数': rating_count,
+                '简介': quote,
+                '详情链接': detail_url
+            })
+            
+            # 收集图片下载任务
+            if poster_url:
+                image_tasks.append((poster_url, f"{rank}_{title_cn}"))
+                
+        except Exception as e:
+            logging.error(f"解析单部电影时出错: {e}")
+            continue # 如果某一部电影出错了，跳过它，继续抓下一部
 
     return parsed_data, image_tasks
 
@@ -79,6 +137,9 @@ def main():
     session = req_manager.create_session()
     selenium_scraper = SeleniumScraper()
     image_downloader = ImageDownloader(save_dir="../output/images")
+
+    if not os.path.exists('../output/raw_data'):
+        os.makedirs('../output/raw_data')
     
     # 准备 CSV 存储
     csv_file = open('../output/raw_data/douban_movies.csv', mode='w', encoding='utf-8-sig', newline='')
@@ -88,12 +149,15 @@ def main():
     writer.writeheader()
 
     # 循环 10 页
-    for page in range(0, 250, 25):
+    # for page in range(0, 250, 25):
+    # 测试模式：只抓取第 1 页
+    for page in range(0, 25, 25):
         url = f'https://movie.douban.com/top250?start={page}&filter='
         logging.info(f"正在抓取列表页: {url}")
         
         # 1. 抓取列表页
         headers = req_manager.get_random_header()
+        # proxy = req_manager.get_random_proxy()  # <--- 获取代理
         try:
             response = session.get(url, headers=headers, timeout=10)
             response.raise_for_status()
@@ -110,6 +174,7 @@ def main():
                 
                 # 获取详情页静态信息
                 detail_headers = req_manager.get_random_header()
+                # detail_proxy = req_manager.get_random_proxy() <--- 获取代理
                 detail_resp = session.get(detail_url, headers=detail_headers, timeout=10)
                 detail_info = parse_detail_page(detail_resp.text)
                 
