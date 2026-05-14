@@ -13,7 +13,7 @@ class ImageDownloader:
     def _download_single(self, task):
         """下载单张图片的任务逻辑"""
         url, title = task
-        # 处理 Windows 文件名不能包含的特殊字符
+        
         safe_title = "".join([c for c in title if c not in r'\/:*?"<>|'])
         file_path = os.path.join(self.save_dir, f"{safe_title}.jpg")
 
@@ -23,7 +23,6 @@ class ImageDownloader:
             return
 
         try:
-            # 简单的请求，图片一般反爬不严
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
                 'Referer': 'https://movie.douban.com/'
