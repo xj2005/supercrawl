@@ -37,7 +37,7 @@ class SeleniumScraper:
         # 抹除底层的自动化特征 
         chrome_options.add_argument("--disable-blink-features=AutomationControlled")
         
-        chrome_options.add_argument("--headless")
+        #chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument('user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"')
@@ -231,8 +231,7 @@ class SeleniumScraper:
         comments_data = []
         
         # 将你的 Cookie 字符串放在这里
-        cookie_str = 'bid=U6zXd3HTiJ4; dbcl2="295061929:OetKeB69RtE"; ck=IQw2; _pk_ref.100001.4cf6=%5B%22%22%2C%22%22%2C1778597801%2C%22https%3A%2F%2Faccounts.douban.com%2F%22%5D; _pk_id.100001.4cf6=1c6d904bc6ef38fd.1778597801.; _pk_ses.100001.4cf6=1; __utma=30149280.473880293.1778597801.1778597801.1778597801.1; __utmc=30149280; __utmz=30149280.1778597801.1.1.utmcsr=accounts.douban.com|utmccn=(referral)|utmcmd=referral|utmcct=/; __utma=223695111.1128929454.1778597801.1778597801.1778597801.1; __utmb=223695111.0.10.1778597801; __utmc=223695111; __utmz=223695111.1778597801.1.1.utmcsr=accounts.douban.com|utmccn=(referral)|utmcmd=referral|utmcct=/; push_noty_num=0; push_doumail_num=0; __utmb=30149280.2.10.1778597801; __yadk_uid=olm3u1a77xeRIO1VbWOhM9xMF25RENnw'
-
+        cookie_str = 'bid=KrsmNU7MwTE; dbcl2="295061929:OetKeB69RtE"; ck=IQw2; _pk_ref.100001.4cf6=%5B%22%22%2C%22%22%2C1779076276%2C%22https%3A%2F%2Faccounts.douban.com%2F%22%5D; _pk_id.100001.4cf6=281c6ce15930317b.1779076276.; _pk_ses.100001.4cf6=1; ap_v=0,6.0; __utma=30149280.2093434684.1779076277.1779076277.1779076277.1; __utmb=30149280.0.10.1779076277; __utmc=30149280; __utmz=30149280.1779076277.1.1.utmcsr=accounts.douban.com|utmccn=(referral)|utmcmd=referral|utmcct=/; __utma=223695111.532562882.1779076277.1779076277.1779076277.1; __utmb=223695111.0.10.1779076277; __utmc=223695111; __utmz=223695111.1779076277.1.1.utmcsr=accounts.douban.com|utmccn=(referral)|utmcmd=referral|utmcct=/'
         try:
             self.driver.get(url)
             current_url = self.driver.current_url
