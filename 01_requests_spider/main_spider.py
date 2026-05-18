@@ -10,6 +10,7 @@ import re
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+####
 # def parse_list_page(html):
 #     """解析列表页，提取基础信息和详情页链接"""
 #     soup = BeautifulSoup(html, 'lxml')
