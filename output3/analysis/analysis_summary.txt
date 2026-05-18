@@ -1,0 +1,31 @@
+============================================================
+电影数据分析摘要报告
+============================================================
+
+数据源文件: douban_movies.csv
+分析时间: 2026-05-18 13:15:51.829498
+
+【数据概览】
+- 总记录数: 250
+- 字段数量: 13
+- 评分范围: 8.4 - 9.7
+- 平均评分: 8.95
+
+【热度分析】
+- 平均评价人数: 865430
+- 最高评价人数: 3287224
+
+【生成的文件】
+- 图表文件: output/analysis/charts/
+  • rating_histogram.png - 评分分布直方图
+  • genre_pie.html/png - 类型分布图
+  • rating_scatter.png - 评分vs评价人数散点图
+  • wordcloud.png - 短评词云图
+  • time_trend.html/png - 时间趋势图
+  • top_movies.png - Top10高分电影
+- 数据文件: output/analysis/
+  • correlation_result.csv - 相关性分析结果
+  • time_trend_data.csv - 时间趋势数据
+  • word_frequency.csv - 词频统计数据
+  • sentiment_results.csv - 情感分析结果
+- 清洗数据: output/cleaned_data/
