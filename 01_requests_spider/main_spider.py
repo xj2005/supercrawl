@@ -159,9 +159,9 @@ def main():
     writer.writeheader()
 
     # 循环 10 页
-    # for page in range(0, 250, 25):
+    for page in range(0, 250, 25):
     # 测试模式
-    for page in range(0, 25, 25):
+    # for page in range(0, 25, 25):
         url = f'https://movie.douban.com/top250?start={page}&filter='
         logging.info(f"正在抓取列表页: {url}")
         
