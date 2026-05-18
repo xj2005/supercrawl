@@ -10,6 +10,7 @@ import re
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+####
 # def parse_list_page(html):
 #     """解析列表页，提取基础信息和详情页链接"""
 #     soup = BeautifulSoup(html, 'lxml')
@@ -159,9 +160,9 @@ def main():
     writer.writeheader()
 
     # 循环 10 页
-    # for page in range(0, 250, 25):
+    for page in range(0, 250, 25):
     # 测试模式
-    for page in range(0, 25, 25):
+    # for page in range(0, 25, 25):
         url = f'https://movie.douban.com/top250?start={page}&filter='
         logging.info(f"正在抓取列表页: {url}")
         
