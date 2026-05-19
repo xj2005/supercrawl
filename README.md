@@ -45,7 +45,7 @@ conda create -n {your_env} python=3.10
 
 # 2. 安装全套依赖
 pip install -r requirements.txt
-\`\`\`
+
 
 ---
 
