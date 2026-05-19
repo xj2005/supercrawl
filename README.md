@@ -30,20 +30,6 @@
 
 ---
 
-## 📂 核心目录与产物说明
-
-\`\`\`text
-supercrawl/
-├── requests_spider/     # 【采集】原生 Requests + Selenium 爬虫引擎 (面向 MySQL 与图片下载)
-├── scrapy_spider/       # 【采集】Scrapy 异步爬虫框架 (面向 SQLite 与多形态文件备份)
-├── data_analysis/       # 【分析】数据清洗、统计、情感分析与可视化核心模块
-├── rag_api/             # 【问答】FastAPI RAG 后端服务、ChromaDB 数据及交互入口
-├── requirements.txt     # Python 依赖清单
-└── README.md            # 项目说明文档
-\`\`\`
-
----
-
 ## ⚙️ 环境配置与依赖安装
 
 ### 1. 系统依赖
