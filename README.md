@@ -59,33 +59,33 @@ pip install -r requirements.txt
 \`\`\`bash
 cd requests_spider
 python main_spider.py
-\`\`\`
+
 
 **选项 B：运行 Scrapy 异步爬虫 (多管线导出)**
 \`\`\`bash
 cd scrapy_spider
 scrapy crawl douban
-\`\`\`
+
 
 ### 阶段二：运行数据清洗与可视化分析
 自动寻找 `output/raw_data/` 下最新生成的 CSV 文件进行自动化处理。
 \`\`\`bash
 cd data_analysis
 python main.py
-\`\`\`
+
 
 ### 阶段三：启动高阶 RAG 智能问答后台
 在项目根目录启动 FastAPI 接口服务：
 \`\`\`bash
 cd rag_api
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
-\`\`\`
+
 
 ### 阶段四：启动 Web UI 交互界面
 保持后端服务在运行状态，新开一个终端窗口：
 \`\`\`bash
 streamlit run rag_api/frontend.py 
-\`\`\`
+
 
 ---
 
