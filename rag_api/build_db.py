@@ -4,7 +4,7 @@ from openai import OpenAI
 
 # 初始化大模型客户端 
 client = OpenAI(
-    api_key="sk-lorfgihajdxnclstjuujdkkkhxfjsvbsvkqcylhukgvagqaz", 
+    api_key="", 
     base_url="https://api.siliconflow.cn/v1"
 )
 
