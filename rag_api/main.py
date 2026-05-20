@@ -19,7 +19,7 @@ app.add_middleware(
 
 # 初始化客户端
 client = OpenAI(
-    api_key="sk-lorfgihajdxnclstjuujdkkkhxfjsvbsvkqcylhukgvagqaz", 
+    api_key="", 
     base_url="https://api.siliconflow.cn/v1"
 )
 chroma_client = chromadb.PersistentClient(path="./chroma_data")
